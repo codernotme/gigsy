@@ -16,8 +16,42 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gigsy - Campus Freelancing & Collaboration Platform",
+  title: "Gigsy",
   description: "Empowering students through freelancing and collaboration opportunities on campus",
+  keywords: "freelancing, student jobs, campus gigs, student freelancers, college projects, student marketplace, skill exchange, campus collaboration, student services",
+  authors: [{ name: "Aryan", url: "https://github.com/codernotme" }],
+  viewport: "width=device-width, initial-scale=1",
+  robots: "index, follow",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://gigsy.codernotme.me",
+    title: "Gigsy",
+    description: "Empowering students through freelancing and collaboration opportunities on campus",
+    siteName: "Gigsy",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Gigsy - Campus Freelancing Platform",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Gigsy",
+    description: "Empowering students through freelancing and collaboration opportunities on campus",
+    images: ["/twitter-image.jpg"],
+    creator: "@gigsy",
+  },
+  verification: {
+    google: "google-site-verification-code",
+  },
 };
 
 export default function RootLayout({

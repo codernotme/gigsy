@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Grid, Paper, Button, Divider } from '@mui/material';
+import { Container, Typography, Box, Grid, Paper, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import TaskCoinStats from '@/components/dashboard/TaskCoinStats';
 import AddTaskIcon from '@mui/icons-material/AddTask';
@@ -59,7 +59,7 @@ const ActivityItem = styled(Paper)(({ theme }) => ({
 
 const Dashboard = () => {
   // Mock data - In a real app, this would come from an API or context
-  const [dashboardData, setDashboardData] = useState({
+  const [dashboardData] = useState({
     completedTasks: 12,
     pendingTasks: 5,
     totalCoinsEarned: 345,
@@ -75,12 +75,12 @@ const Dashboard = () => {
   // Simulate data fetch
   useEffect(() => {
     // In a real app, you'd fetch data from an API here
-    const fetchDashboardData = async () => {
-      // const response = await fetch('/api/dashboard');
-      // const data = await response.json();
-      // setDashboardData(data);
-    };
-
+    // Commented out to avoid unused variable warnings
+    // const fetchDashboardData = async () => {
+    //   // const response = await fetch('/api/dashboard');
+    //   // const data = await response.json();
+    //   // setDashboardData(data);
+    // };
     // fetchDashboardData();
   }, []);
 
@@ -92,7 +92,7 @@ const Dashboard = () => {
             Dashboard
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            Welcome back, {dashboardData.userName}! Here's your task progress and earnings.
+            Welcome back, {dashboardData.userName}! Here&apos;s your task progress and earnings.
           </Typography>
         </Box>
         <Box>
@@ -114,10 +114,10 @@ const Dashboard = () => {
 
       <WelcomeSection elevation={3}>
         <Typography variant="h5" gutterBottom>
-          You're doing great!
+          You&apos;re doing great!
         </Typography>
         <Typography variant="body1">
-          You've completed {dashboardData.completedTasks} tasks this month and earned {dashboardData.totalCoinsEarned} coins.
+          You&apos;ve completed {dashboardData.completedTasks} tasks this month and earned {dashboardData.totalCoinsEarned} coins.
           Keep up the good work!
         </Typography>
       </WelcomeSection>

@@ -19,7 +19,7 @@ export default function LoginPage() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       toast.success('Successfully logged in!');
       // Add actual login logic here
-    } catch (error) {
+    } catch {
       toast.error('Login failed. Please try again.');
     } finally {
       setLoading(false);

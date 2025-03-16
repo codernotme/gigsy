@@ -42,7 +42,7 @@ export default function BidModal({
       await onSubmitBid(bidAmount, proposal);
       toast.success('Bid submitted successfully!');
       onClose();
-    } catch (error) {
+    } catch {
       toast.error('Failed to submit bid. Please try again.');
     } finally {
       setLoading(false);

@@ -2,22 +2,6 @@
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-indigo-950">
-      {/* Header/Navigation */}
-      <header className="p-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md fixed w-full z-10">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Gigsy</div>
-          <nav className="hidden md:flex gap-6">
-            <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Home</a>
-            <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Projects</a>
-            <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Events</a>
-            <a href="#" className="hover:text-indigo-600 dark:hover:text-indigo-400">Leaderboard</a>
-          </nav>
-          <div className="flex gap-3">
-            <button className="px-4 py-2 rounded bg-transparent border border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white dark:border-indigo-400 dark:text-indigo-400 dark:hover:bg-indigo-400 dark:hover:text-gray-900">Login</button>
-            <button className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600">Sign Up</button>
-          </div>
-        </div>
-      </header>
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4">

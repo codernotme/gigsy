@@ -1,4 +1,6 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   /* Updated Gigsy brand colors */
@@ -21,9 +23,8 @@
   --ring: #6366f1;
   --muted: #f3f4f6;
   --muted-foreground: #6b7280;
-}
-
-@theme inline {
+  
+  /* Theme variables */
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);
   --color-primary-dark: var(--primary-dark);
@@ -163,4 +164,139 @@ body {
 /* Responsive container */
 .container-custom {
   @apply container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl;
+}
+
+/* Enhanced Dashboard Styles */
+.dashboard-card {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-all duration-300 hover:shadow-xl border border-gray-100 dark:border-gray-700;
+}
+
+.dashboard-stat {
+  @apply flex items-center space-x-4 p-6 rounded-xl bg-gradient-to-br from-primary to-primary-dark text-white;
+}
+
+.dashboard-chart {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 h-[400px];
+}
+
+/* Enhanced Project Card Styles */
+.project-card {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700;
+}
+
+.project-card-header {
+  @apply p-6 border-b border-gray-100 dark:border-gray-700;
+}
+
+.project-card-body {
+  @apply p-6 space-y-4;
+}
+
+.project-card-footer {
+  @apply px-6 py-4 bg-gray-50 dark:bg-gray-900 flex justify-between items-center;
+}
+
+/* Enhanced Event Card Styles */
+.event-card {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700;
+}
+
+.event-card-image {
+  @apply relative h-48 w-full overflow-hidden;
+}
+
+.event-card-content {
+  @apply p-6 space-y-4;
+}
+
+/* Enhanced Leaderboard Styles */
+.leaderboard-card {
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700;
+}
+
+.leaderboard-item {
+  @apply flex items-center space-x-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200;
+}
+
+/* Loading States */
+.loading-skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+/* Tooltips */
+.tooltip {
+  @apply absolute z-10 px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm dark:bg-gray-700;
+}
+
+/* Badges */
+.status-badge {
+  @apply px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.status-badge-success {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200;
+}
+
+.status-badge-warning {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200;
+}
+
+.status-badge-error {
+  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200;
+}
+
+/* Progress Bars */
+.progress-bar {
+  @apply h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden;
+}
+
+.progress-bar-fill {
+  @apply h-full bg-primary rounded-full transition-all duration-300;
+}
+
+/* Animations */
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
 }

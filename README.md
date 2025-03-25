@@ -56,15 +56,11 @@ Gigsy is open-source and licensed under **MIT License**. Feel free to contribute
 
 ---
 
-## 🤝 Contributing
-We welcome contributions! Check out our [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
----
 
 ## 🌟 Contributors
 Thanks to these amazing contributors:
 
-[![Aryan Bajpai](https://github.com/codernotme.png?size=100)](https://github.com/codernotme)
+[![Contributors](https://contrib.rocks/image?repo=codernotme/gigsy)](https://github.com/codernotme/gigsy/graphs/contributors)
 
 Want to contribute? Open an issue or submit a pull request!
 

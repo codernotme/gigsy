@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "postinstall": "npm run fix-deps",
+    "fix-deps": "npm install glob-parent fast-glob"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -56,8 +58,10 @@
     "embla-carousel-react": "^8.3.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.5.1",
+    "fast-glob": "^3.3.3",
     "fastq": "^1.19.1",
     "framer-motion": "^11.0.8",
+    "glob-parent": "^6.0.2",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.446.0",
     "nanoid": "^5.1.5",

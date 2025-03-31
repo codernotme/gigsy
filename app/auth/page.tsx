@@ -14,16 +14,59 @@ export default function AuthPage() {
   const [accountType, setAccountType] = useState<'individual' | 'group'>('individual')
   const router = useRouter()
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Would normally authenticate with backend
-    router.push('/dashboard')
+    const email = (document.getElementById("email") as HTMLInputElement).value
+    const password = (document.getElementById("password") as HTMLInputElement).value
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        localStorage.setItem('token', data.token)
+        router.push('/dashboard')
+      } else {
+        const error = await response.json()
+        alert(error.error || 'Login failed')
+      }
+    } catch (err) {
+      alert('An error occurred. Please try again.')
+    }
   }
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Would normally register with backend
-    router.push('/dashboard')
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const payload = {
+      accountType,
+      name: formData.get(accountType === 'individual' ? 'name' : 'team-name'),
+      email: formData.get('register-email'),
+      password: formData.get('register-password'),
+      ...(accountType === 'group' && { teamLead: formData.get('team-lead'), teamSize: formData.get('member-count') }),
+      ...(accountType === 'individual' && { skills: formData.get('skills') }),
+    };
+
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        router.push('/dashboard');
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Registration failed');
+      }
+    } catch (err) {
+      alert('An error occurred. Please try again.');
+    }
   }
 
   return (

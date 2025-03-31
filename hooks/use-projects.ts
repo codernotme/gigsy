@@ -1,97 +1,38 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase/client';
-import { useAuth } from './use-auth';
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  budget: number;
-  deadline: string;
-  status: 'open' | 'in_progress' | 'completed' | 'cancelled';
-  skills_required: string[];
-}
-
-interface Bid {
-  id: string;
-  amount: number;
-  proposal: string;
-  status: 'pending' | 'accepted' | 'rejected';
-  created_at: string;
-}
+import { Project, Bid } from '@/lib/supabase/client';
 
 export function useProjects() {
-  const { user } = useAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    const fetchProjects = async () => {
+      setLoading(true);
+      const { data, error } = await supabase.from('projects').select('*');
 
-    async function loadProjects() {
-      try {
-        const { data, error } = await supabase
-          .from('projects')
-          .select('*')
-          .order('created_at', { ascending: false });
+      if (error) console.error('Error fetching projects:', error);
+      else setProjects(data || []);
 
-        if (error) throw error;
-        setProjects(data);
-      } catch (error) {
-        console.error('Error loading projects:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
+      setLoading(false);
+    };
 
-    loadProjects();
-  }, [user]);
+    fetchProjects();
+  }, []);
 
-  const createProject = async (projectData: Omit<Project, 'id' | 'status'>) => {
-    try {
-      const { data, error } = await supabase
-        .from('projects')
-        .insert([{ ...projectData, owner_id: user?.id }])
-        .select()
-        .single();
+  const createBid = async (projectId: string, bidderId: string, amount: number, proposal: string) => {
+    const { data, error } = await supabase.from('bids').insert({
+      project_id: projectId,
+      bidder_id: bidderId,
+      amount,
+      proposal,
+    });
 
-      if (error) throw error;
-      setProjects([data, ...projects]);
-      return data;
-    } catch (error) {
-      console.error('Error creating project:', error);
-      throw error;
-    }
+    if (error) console.error('Error creating bid:', error);
+    return data;
   };
 
-  const submitBid = async (projectId: string, amount: number, proposal: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('bids')
-        .insert([
-          {
-            project_id: projectId,
-            bidder_id: user?.id,
-            amount,
-            proposal,
-          },
-        ])
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error submitting bid:', error);
-      throw error;
-    }
-  };
-
-  return {
-    projects,
-    loading,
-    createProject,
-    submitBid,
-    refreshProjects: () => setLoading(true),
-  };
+  return { projects, loading, createBid };
 }

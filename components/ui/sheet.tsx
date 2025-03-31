@@ -126,6 +126,8 @@ const SheetDescription = React.forwardRef<
 ));
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
+// Removed redundant definition of SheetContent
+
 export {
   Sheet,
   SheetPortal,

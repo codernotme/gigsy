@@ -12,19 +12,48 @@ import {
 } from "lucide-react"
 import { useAuthStore } from "@/lib/store/auth-store"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+
+interface Project {
+  id: string | number;
+  title: string;
+  description: string;
+  budget: number;
+  deadline: string;
+}
 
 export default function IndividualDashboard() {
   const { user } = useAuthStore()
   const router = useRouter()
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (!user || user.accountType !== 'individual') {
       router.push('/dashboard')
+    } else {
+      setLoading(true)
+      fetch('/api/projects', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch projects')
+          return res.json()
+        })
+        .then((data) => setProjects(data))
+        .catch((err) => alert(err.message))
+        .finally(() => setLoading(false))
     }
   }, [user, router])
 
   if (!user || user.accountType !== 'individual') return null
+
+  if (loading) {
+    return <div className="text-center py-8">Loading...</div>
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -109,25 +138,15 @@ export default function IndividualDashboard() {
         
         <TabsContent value="projects" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[1, 2].map((i) => (
-              <Card key={i}>
+            {projects.map((project) => (
+              <Card key={project.id}>
                 <CardHeader>
-                  <div className="flex justify-between">
-                    <CardTitle>Frontend Development Project {i}</CardTitle>
-                    <Badge>{["In Progress", "Final Review"][i-1]}</Badge>
-                  </div>
+                  <CardTitle>{project.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {i === 1 ? "Creating a responsive dashboard with React and Tailwind CSS" : "Implementing authentication flows and user profiles"}
-                  </p>
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="text-sm text-muted-foreground">Due in {i*3} days</div>
-                    <div className="text-sm font-medium">{i*450} GC</div>
-                  </div>
-                  <Progress value={[45, 85][i-1]} className="mb-1" />
-                  <div className="text-sm text-muted-foreground">{[45, 85][i-1]}% completed</div>
-                  <Button size="sm" className="w-full mt-4">Continue Working</Button>
+                  <p>{project.description}</p>
+                  <p className="text-sm text-muted-foreground">Budget: {project.budget} GC</p>
+                  <p className="text-sm text-muted-foreground">Deadline: {new Date(project.deadline).toLocaleDateString()}</p>
                 </CardContent>
               </Card>
             ))}

@@ -53,11 +53,41 @@ Gigsy is an innovative platform developed to revolutionize freelancing within co
 - **Customizable Profiles**: Add skills, team details, and more.
 
 ---
+
 ## 🎯 Benefits
 ✅ **Real-World Experience**: Gain freelance exposure & earn money.  
 ✅ **Networking**: Connect & collaborate across colleges.  
 ✅ **Skill Development**: Learn project management & teamwork.  
 ✅ **Gamification**: Gigbits and leaderboards add an engaging element.  
+
+---
+
+## Setup Instructions
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/gigsy.git
+   cd gigsy
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up Supabase:
+   - Create a Supabase project at [supabase.com](https://supabase.com).
+   - Copy your Supabase URL and Anon Key into `.env.local`.
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Seed the database:
+   ```bash
+   npx supabase db reset
+   ```
 
 ---
 

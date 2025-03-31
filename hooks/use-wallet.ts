@@ -1,67 +1,44 @@
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase/client';
-import { useAuth } from './use-auth';
+import { Wallet, Transaction } from '@/lib/supabase/client';
 
-interface Wallet {
-  id: string;
-  balance: number;
-  total_earned: number;
-  total_spent: number;
-}
-
-interface Transaction {
-  id: string;
-  amount: number;
-  type: 'earning' | 'spending' | 'transfer' | 'reward';
-  description: string;
-  created_at: string;
-}
-
-export function useWallet() {
-  const { user } = useAuth();
+export function useWallet(userId: string) {
   const [wallet, setWallet] = useState<Wallet | null>(null);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (!userId) return;
 
-    async function loadWallet() {
-      try {
-        // Get wallet
-        const { data: walletData, error: walletError } = await supabase
-          .from('wallets')
-          .select('*')
-          .eq('user_id', user?.id)
-          .single();
+    const fetchWallet = async () => {
+      setLoading(true);
+      const { data: walletData, error } = await supabase
+        .from('wallets')
+        .select('*')
+        .eq('user_id', userId)
+        .single();
 
-        if (walletError) throw walletError;
-        setWallet(walletData);
+      if (error) console.error('Error fetching wallet:', error);
+      else setWallet(walletData);
 
-        // Get recent transactions
-        const { data: txData, error: txError } = await supabase
-          .from('transactions')
-          .select('*')
-          .eq('wallet_id', walletData.id)
-          .order('created_at', { ascending: false })
-          .limit(10);
+      setLoading(false);
+    };
 
-        if (txError) throw txError;
-        setTransactions(txData);
-      } catch (error) {
-        console.error('Error loading wallet:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
+    const fetchTransactions = async () => {
+      const { data: transactionData, error } = await supabase
+        .from('transactions')
+        .select('*')
+        .eq('wallet_id', wallet?.id);
 
-    loadWallet();
-  }, [user]);
+      if (error) console.error('Error fetching transactions:', error);
+      else setTransactions(transactionData || []);
+    };
 
-  return {
-    wallet,
-    transactions,
-    loading,
-    refreshWallet: () => setLoading(true), // This will trigger the useEffect
-  };
+    fetchWallet();
+    if (wallet) fetchTransactions();
+  }, [userId, wallet?.id]);
+
+  return { wallet, transactions, loading };
 }

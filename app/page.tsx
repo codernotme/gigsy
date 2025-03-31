@@ -15,6 +15,8 @@ export default function Home() {
 
   if (!mounted) return null
 
+  const FloatingIcons = [Trophy, Star, Coins, Users, Code]
+
   return (
     <main>
       {/* Hero Section */}
@@ -58,7 +60,7 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
         >
-          {[...Array(5)].map((_, i) => (
+          {FloatingIcons.map((Icon, i) => (
             <motion.div
               key={i}
               className="absolute"
@@ -76,7 +78,7 @@ export default function Home() {
                 repeat: Infinity,
               }}
             >
-              {[Trophy, Star, Coins, Users, Code][i]({ className: "h-8 w-8 text-primary/20" })}
+              <Icon className="h-8 w-8 text-primary/20" />
             </motion.div>
           ))}
         </motion.div>

@@ -3,6 +3,7 @@ import { create } from 'zustand';
 export type UserRole = 'admin' | 'maintainer' | 'ambassador' | 'group' | 'individual';
 
 interface User {
+  accountType: string;
   id: string;
   email: string;
   role: UserRole;

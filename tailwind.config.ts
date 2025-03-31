@@ -60,6 +60,14 @@ const config: Config = {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
+        gigcoin: {
+          DEFAULT: '#FFD700',
+          foreground: '#4B4B4B',
+        },
+        verification: {
+          DEFAULT: '#4CAF50',
+          foreground: '#FFFFFF',
+        },
       },
       keyframes: {
         'accordion-down': {

@@ -2,119 +2,186 @@
 
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { TowerControl, Github, Mail } from "lucide-react"
-import { motion } from "framer-motion"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { TowerControl, User, Users, ShieldCheck } from "lucide-react"
+import { useRouter } from "next/navigation"
 
-export default function Auth() {
-  const [isLoading, setIsLoading] = useState(false)
+export default function AuthPage() {
+  const [accountType, setAccountType] = useState<'individual' | 'group'>('individual')
+  const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
-    // Add authentication logic here
-    setTimeout(() => setIsLoading(false), 2000)
+    // Would normally authenticate with backend
+    router.push('/dashboard')
+  }
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Would normally register with backend
+    router.push('/dashboard')
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-accent/5">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
-        <Card className="border-2">
-          <CardHeader className="space-y-1 text-center">
-            <div className="flex justify-center mb-4">
-              <TowerControl className="h-12 w-12 text-primary" />
-            </div>
-            <CardTitle className="text-3xl">Welcome to Gigsy</CardTitle>
-            <CardDescription>Enter the world of gamified freelancing</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-8">
-                <TabsTrigger value="login">Login</TabsTrigger>
-                <TabsTrigger value="register">Register</TabsTrigger>
-              </TabsList>
-              <TabsContent value="login">
-                <form onSubmit={handleSubmit}>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="john@example.com" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input id="password" type="password" required />
-                    </div>
-                    <Button className="w-full" type="submit" disabled={isLoading}>
-                      {isLoading ? "Loading..." : "Login"}
-                    </Button>
+    <div className="min-h-screen flex items-center justify-center bg-accent/5 px-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <TowerControl className="h-12 w-12 mx-auto mb-2" />
+          <h1 className="text-3xl font-bold">Welcome to Gigsy</h1>
+          <p className="text-muted-foreground">Level up your freelance career</p>
+        </div>
+        
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login">Login</TabsTrigger>
+            <TabsTrigger value="register">Register</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="login">
+            <Card>
+              <CardHeader>
+                <CardTitle>Login to your account</CardTitle>
+                <CardDescription>
+                  Enter your credentials to access your account
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" placeholder="name@example.com" />
                   </div>
-                </form>
-              </TabsContent>
-              <TabsContent value="register">
-                <form onSubmit={handleSubmit}>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="username">Username</Label>
-                      <Input id="username" placeholder="johndoe" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-email">Email</Label>
-                      <Input id="register-email" type="email" placeholder="john@example.com" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="register-password">Password</Label>
-                      <Input id="register-password" type="password" required />
-                    </div>
-                    <Button className="w-full" type="submit" disabled={isLoading}>
-                      {isLoading ? "Creating Account..." : "Create Account"}
-                    </Button>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input id="password" type="password" />
                   </div>
+                  <Button type="submit" className="w-full">Sign In</Button>
                 </form>
-              </TabsContent>
-            </Tabs>
-
-            <div className="relative my-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t"></div>
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <Button variant="outline" className="w-full">
-                <Github className="mr-2 h-4 w-4" />
-                Github
-              </Button>
-              <Button variant="outline" className="w-full">
-                <Mail className="mr-2 h-4 w-4" />
-                Google
-              </Button>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4 text-center text-sm text-muted-foreground">
-            <div>
-              By continuing, you agree to our{" "}
-              <a href="#" className="underline underline-offset-4 hover:text-primary">
-                Terms of Service
-              </a>{" "}
-              and{" "}
-              <a href="#" className="underline underline-offset-4 hover:text-primary">
-                Privacy Policy
-              </a>
-            </div>
-          </CardFooter>
-        </Card>
-      </motion.div>
+              </CardContent>
+              <CardFooter className="flex justify-center">
+                <Button variant="link" className="text-sm text-muted-foreground">
+                  Forgot password?
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+          
+          <TabsContent value="register">
+            <Card>
+              <CardHeader>
+                <CardTitle>Create an account</CardTitle>
+                <CardDescription>
+                  Join our community of freelancers and clients
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Account Type</Label>
+                    <RadioGroup 
+                      defaultValue="individual" 
+                      className="grid grid-cols-2 gap-4"
+                      onValueChange={(value) => setAccountType(value as 'individual' | 'group')}
+                    >
+                      <div>
+                        <RadioGroupItem 
+                          value="individual" 
+                          id="individual" 
+                          className="peer sr-only" 
+                        />
+                        <Label
+                          htmlFor="individual"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                        >
+                          <User className="mb-3 h-6 w-6" />
+                          <span className="text-center font-medium">Individual</span>
+                          <span className="text-center text-xs text-muted-foreground">
+                            Work solo on projects
+                          </span>
+                        </Label>
+                      </div>
+                      <div>
+                        <RadioGroupItem 
+                          value="group" 
+                          id="group" 
+                          className="peer sr-only" 
+                        />
+                        <Label
+                          htmlFor="group"
+                          className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                        >
+                          <Users className="mb-3 h-6 w-6" />
+                          <span className="text-center font-medium">Team</span>
+                          <span className="text-center text-xs text-muted-foreground">
+                            Collaborate with others
+                          </span>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor={accountType === 'individual' ? "name" : "team-name"}>
+                      {accountType === 'individual' ? 'Full Name' : 'Team Name'}
+                    </Label>
+                    <Input 
+                      id={accountType === 'individual' ? "name" : "team-name"} 
+                      placeholder={accountType === 'individual' ? "John Doe" : "Team Awesome"} 
+                    />
+                  </div>
+                  
+                  {accountType === 'group' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="team-lead">Team Lead Name</Label>
+                      <Input id="team-lead" placeholder="Team Lead Name" />
+                    </div>
+                  )}
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="register-email">Email</Label>
+                    <Input id="register-email" type="email" placeholder="name@example.com" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="register-password">Password</Label>
+                    <Input id="register-password" type="password" />
+                  </div>
+                  
+                  {accountType === 'individual' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="skills">Primary Skills (comma separated)</Label>
+                      <Input id="skills" placeholder="React, UI Design, Node.js" />
+                    </div>
+                  )}
+                  
+                  {accountType === 'group' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="member-count">Initial Team Size</Label>
+                      <Input id="member-count" type="number" min="2" max="10" defaultValue="3" />
+                    </div>
+                  )}
+                  
+                  <div className="rounded-md bg-accent/50 p-3 text-sm flex items-start">
+                    <ShieldCheck className="h-5 w-5 mr-2 mt-0.5 text-primary" />
+                    <div>
+                      <span className="font-medium">Verification Required</span>
+                      <p className="text-muted-foreground">
+                        Your account will need to be verified by a Campus Ambassador before you can start bidding on projects.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <Button type="submit" className="w-full">Create Account</Button>
+                </form>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,7 @@
 "use client"
 
+import React from 'react';
+import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -9,9 +11,30 @@ import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Clock, DollarSign, MessageSquare, Star, CheckCircle2 } from "lucide-react"
 
-export default function ProjectDetails({ params }: { params: { id: string } }) {
+// Define the correct props type for a Next.js dynamic route page component
+interface ProjectPageProps {
+  params: {
+    id: string;
+  };
+  searchParams?: {
+    [key: string]: string | string[] | undefined
+  }
+}
+
+export default function ProjectPage({ params }: ProjectPageProps) {
+  const { id } = params;
+
+  // Placeholder for fetching project data
+  // In a real app, you would fetch the project data based on the ID
+  // For now, we'll just return a simple UI
+  
+  if (!id) {
+    return notFound();
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
+      <h1>Project ID: {id}</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Main Project Info */}
         <div className="md:col-span-2 space-y-6">
@@ -152,5 +175,5 @@ export default function ProjectDetails({ params }: { params: { id: string } }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

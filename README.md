@@ -42,6 +42,16 @@ Gigsy is an innovative platform developed to revolutionize freelancing within co
 - **Leaderboards**: Showcase top freelancers.
 - **Feedback System**: Rate projects and event experiences.
 
+### 💳 GigCoin Wallet System
+- **Track Earnings**: View your GigCoin balance and transaction history.
+- **Redeem Rewards**: Use GigCoins for premium features or cash out.
+- **Secure Transactions**: Powered by UPI integration.
+
+### 🔒 Enhanced Authentication
+- **User Types**: Choose between Individual or Group accounts during registration.
+- **Verification**: Campus Ambassadors verify accounts for authenticity.
+- **Customizable Profiles**: Add skills, team details, and more.
+
 ---
 ## 🎯 Benefits
 ✅ **Real-World Experience**: Gain freelance exposure & earn money.  
@@ -55,7 +65,6 @@ Gigsy is an innovative platform developed to revolutionize freelancing within co
 Gigsy is open-source and licensed under **MIT License**. Feel free to contribute and make it better!
 
 ---
-
 
 ## 🌟 Contributors
 Thanks to these amazing contributors:

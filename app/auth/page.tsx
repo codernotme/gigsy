@@ -14,32 +14,20 @@ export default function AuthPage() {
   const [accountType, setAccountType] = useState<'individual' | 'group'>('individual')
   const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault()
     const email = (document.getElementById("email") as HTMLInputElement).value
     const password = (document.getElementById("password") as HTMLInputElement).value
 
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        localStorage.setItem('token', data.token)
-        router.push('/dashboard')
-      } else {
-        const error = await response.json()
-        alert(error.error || 'Login failed')
-      }
-    } catch (err) {
-      alert('An error occurred. Please try again.')
-    }
+    // Frontend-only implementation
+    console.log("Login attempt with:", { email, password })
+    alert("Login functionality would connect to a backend in a real app")
+    
+    // Simulate successful login
+    router.push('/dashboard')
   }
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const payload = {
@@ -51,22 +39,12 @@ export default function AuthPage() {
       ...(accountType === 'individual' && { skills: formData.get('skills') }),
     };
 
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
-        router.push('/dashboard');
-      } else {
-        const error = await response.json();
-        alert(error.error || 'Registration failed');
-      }
-    } catch (err) {
-      alert('An error occurred. Please try again.');
-    }
+    // Frontend-only implementation
+    console.log("Registration data:", payload)
+    alert("Registration functionality would connect to a backend in a real app")
+    
+    // Simulate successful registration
+    router.push('/dashboard')
   }
 
   return (

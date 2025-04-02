@@ -23,6 +23,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pixel-bg">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'64\' height=\'64\' viewBox=\'0 0 64 64\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M0 0h8v8H0zM16 0h8v8h-8zM32 0h8v8h-8zM48 0h8v8h-8zM8 8h8v8H8zM24 8h8v8h-8zM40 8h8v8h-8zM56 8h8v8h-8z\' fill=\'%23000\' fill-opacity=\'0.1\' /%3E%3C/svg%3E')] bg-repeat opacity-20" />
+        <div className="checkers-bg-light" />
         <div 
           className="absolute inset-0" 
           style={{
@@ -162,10 +163,12 @@ export default function Home() {
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
             Join thousands of freelancers who have transformed their careers through gamified experiences
           </p>
+          <Link href="/auth" className="w-full">
           <Button size="lg" className="bg-primary hover:bg-primary/90">
             Join Gigsy Now
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
+          </Link>
         </div>
       </section>
     </main>

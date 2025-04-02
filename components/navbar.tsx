@@ -5,6 +5,7 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuL
 import { TowerControl, Trophy, Coins, Users, MessageSquare, Calendar } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export function Navbar() {
   const pathname = usePathname()
@@ -46,11 +47,14 @@ export function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        <Link href="/auth">
-          <Button variant="default">
-            Connect Wallet
-          </Button>
-        </Link>
+        <div className="flex items-center space-x-2">
+          <ThemeToggle />
+          <Link href="/auth">
+            <Button variant="default">
+              Login / Sign Up
+            </Button>
+          </Link>
+        </div>
       </div>
     </nav>
   )

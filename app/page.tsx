@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { TowerControl as GameController, Trophy, Coins, Users, ArrowRight, Star, Code, Globe } from "lucide-react"
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react"
+import Link from "next/link"
 
 export default function Home() {
   const [mounted, setMounted] = useState(false)
@@ -41,14 +42,18 @@ export default function Home() {
               Level Up Your Freelance Career in the Gaming-Inspired Marketplace
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/auth" className="w-full">
               <Button size="lg" className="minecraft-button text-lg px-8 py-6 bg-primary hover:bg-primary/90">
                 <GameController className="mr-2 h-6 w-6" />
                 Start Your Journey
               </Button>
+              </Link>
+              <Link href="/jobs" className="w-full">
               <Button size="lg" className="minecraft-button text-lg px-8 py-6" variant="outline">
                 Explore Quests
                 <ArrowRight className="ml-2 h-6 w-6" />
               </Button>
+              </Link>
             </div>
           </motion.div>
         </div>

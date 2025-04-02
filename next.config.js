@@ -5,10 +5,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  experimental: {
-    // Enable proper module resolution
-    esmExternals: 'loose',
-  },
   webpack: (config) => {
     // Ensure node modules are properly resolved
     config.resolve.fallback = {

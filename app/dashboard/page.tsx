@@ -1,39 +1,51 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { useMinecraftToast } from "@/hooks/use-minecraft-toast"
+import { useQuery } from "convex/react"
+import MaintainerDashboard from "./maintainer/page"
+import IndividualDashboard from "./individual/page"
+import GroupDashboard from "./group/page"
+import AmbassadorDashboard from "./ambassador/page"
+import AdminDashboard from "./admin/page"
+import { api } from "@/convex/_generated/api"
 
 export default function DashboardPage() {
-  return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-      <p className="text-muted-foreground mb-8">Welcome to your freelancer dashboard</p>
-      
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>Active Projects</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">0</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Wallet Balance</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">$0.00</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Completed Projects</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">0</p>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  )
+  const user = useQuery(api.users.get)
+  const router = useRouter()
+  const toast = useMinecraftToast()
+
+  useEffect(() => {
+    if (!user) {
+      toast.error({
+        title: "Authentication Required",
+        description: "Please log in to access the dashboard."
+      })
+      router.push('/auth')
+      return
+    }
+  }, [user, router, toast])
+
+  if (!user) return null
+
+  // Render the appropriate dashboard based on user role
+  switch (user.role) {
+    case "maintainer":
+      return <MaintainerDashboard />
+    case "individual":
+      return <IndividualDashboard />
+    case "group":
+      return <GroupDashboard />
+    case "ambassador":
+      return <AmbassadorDashboard />
+    case "admin":
+      return <AdminDashboard />
+    default:
+      toast.warning({
+        title: "Unknown Role",
+        description: "Your account has an unrecognized role."
+      })
+      return <div className="text-center py-8">Role not recognized. Please contact support.</div>
+  }
 }

@@ -1,0 +1,62 @@
+@font-face {
+  font-family: 'Minecraft';
+  src: url('/fonts/MinecraftRegular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-minecraft {
+  font-family: 'Minecraft', monospace;
+  letter-spacing: 0.05em;
+}
+
+.toast-animate-in {
+  animation: minecraft-appear 0.3s cubic-bezier(0.25, 0.1, 0.25, 1.0) forwards;
+  transform-origin: top right;
+}
+
+@keyframes minecraft-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-10px);
+  }
+  50% {
+    transform: scale(1.05) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.minecraft-toast {
+  image-rendering: pixelated;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  transform: translateZ(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.minecraft-toast:hover {
+  transform: translateY(-2px) translateZ(0);
+}
+
+/* Custom toast animations for different types */
+.minecraft-toast[data-type="achievement"] {
+  animation: achievement-animation 0.5s ease-in-out;
+}
+
+@keyframes achievement-animation {
+  0% {
+    transform: translateX(100%) scale(0.8);
+  }
+  40% {
+    transform: translateX(-5%) scale(1.1);
+  }
+  70% {
+    transform: translateX(2%) scale(0.95);
+  }
+  100% {
+    transform: translateX(0) scale(1);
+  }
+}

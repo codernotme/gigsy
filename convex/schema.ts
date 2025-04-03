@@ -11,38 +11,31 @@ export default defineSchema({
     ...authTables, // Authentication tables from Convex
 
   /**
-   * User profiles containing personal information and account details
+   * Users table containing authentication and account details
    */
-  profiles: defineTable({
-    email: v.string(), // User's email address (unique identifier)
-    account_type: v.string(), // Type of account (e.g., freelancer, client)
-    role: v.string(), // User's role in the system
+  users: defineTable({
+    name: v.optional(v.string()),
+    image: v.optional(v.string()),
+    email: v.optional(v.string()),
+    emailVerificationTime: v.optional(v.number()),
+    phone: v.optional(v.string()),
+    phoneVerificationTime: v.optional(v.number()),
+    isAnonymous: v.optional(v.boolean()),
+    role: v.optional(v.string()), // User role, default is "individual"
+    account_type: v.optional(v.string()), // Account type: "individual" or "group"
     display_name: v.optional(v.string()), // User's display name
     avatar_url: v.optional(v.string()), // URL to user's avatar/profile picture
     bio: v.optional(v.string()), // User biography or description
     skills: v.optional(v.array(v.string())), // List of user skills
-    level: v.number(), // User experience level
-    is_verified: v.boolean(), // Whether the user is verified (legacy field)
-    verified_by: v.optional(v.string()), // Who verified the user
-    verified_at: v.optional(v.string()), // When the user was verified
-    created_at: v.string(), // Account creation timestamp
-    updated_at: v.string(), // Last update timestamp
-    // Authentication and verification fields
-    passwordHash: v.optional(v.string()), // Hashed user password for authentication
-    emailVerified: v.optional(v.boolean()), // Whether email has been verified
-    userType: v.optional(v.union(v.literal("individual"), v.literal("group"))), // Individual or group account
-    isVerified: v.optional(v.boolean()), // New verification status field
-    bids: v.optional(v.number()), // Number of bids placed by user
-    imageUrl: v.optional(v.string()), // Alternative profile image URL
-    oauthSubject: v.optional(v.string()), // OAuth subject identifier for external auth
-  }).index("email", ["email"])
-  .index("by_account_type", ["account_type"]),
+    created_at: v.optional(v.string()), // Account creation timestamp
+    updated_at: v.optional(v.string()), // Last update timestamp
+  }).index("email", ["email"]),
 
   /**
    * User wallets for managing platform currency and transactions
    */
   wallets: defineTable({
-    user_id: v.id("profiles"), // Reference to profile owner
+    user_id: v.id("users"), // Reference to profile owner
     balance: v.number(), // Current wallet balance
     total_earned: v.number(), // Total amount earned on platform
     total_spent: v.number(), // Total amount spent on platform
@@ -70,7 +63,7 @@ export default defineSchema({
   projects: defineTable({
     title: v.string(), // Project title
     description: v.string(), // Project description
-    owner_id: v.id("profiles"), // Client who posted the project
+    owner_id: v.id("users"), // Client who posted the project
     budget: v.number(), // Project budget
     deadline: v.string(), // Project deadline
     status: v.string(), // Project status (open, in-progress, completed)
@@ -84,7 +77,7 @@ export default defineSchema({
    */
   bids: defineTable({
     project_id: v.id("projects"), // Reference to project
-    bidder_id: v.id("profiles"), // Freelancer who submitted the bid
+    bidder_id: v.id("users"), // Freelancer who submitted the bid
     amount: v.number(), // Bid amount
     proposal: v.string(), // Bid proposal/description
     status: v.string(), // Bid status (pending, accepted, rejected)
@@ -112,7 +105,7 @@ export default defineSchema({
   events: defineTable({
     title: v.string(), // Event title
     description: v.string(), // Event description
-    organizer_id: v.id("profiles"), // User organizing the event
+    organizer_id: v.id("users"), // User organizing the event
     start_date: v.string(), // Event start date/time
     end_date: v.string(), // Event end date/time
     location: v.optional(v.string()), // Event location
@@ -128,7 +121,7 @@ export default defineSchema({
    */
   event_registrations: defineTable({
     event_id: v.id("events"), // Reference to event
-    user_id: v.id("profiles"), // User registered for event
+    user_id: v.id("users"), // User registered for event
     status: v.string(), // Registration status (registered, attended, etc.)
     reward_claimed: v.boolean(), // Whether event reward has been claimed
     created_at: v.string(), // Registration timestamp
@@ -150,7 +143,7 @@ export default defineSchema({
    */
   conversationMembers: defineTable({
     conversation_id: v.id("conversations"), // The ID of the conversation
-    member_id: v.id("profiles"), // The ID of the user who is a member of the conversation
+    member_id: v.id("users"), // The ID of the user who is a member of the conversation
     last_seen_message_id: v.optional(v.id("messages")), // ID of the last message seen by the user
   })
     .index("by_conversation_id", ["conversation_id"])
@@ -161,7 +154,7 @@ export default defineSchema({
    */
   messages: defineTable({
     conversation_id: v.id("conversations"), // ID of the conversation the message belongs to
-    sender_id: v.id("profiles"), // ID of the user who sent the message
+    sender_id: v.id("users"), // ID of the user who sent the message
     content: v.string(), // Content of the message
     type: v.string(), // Type of the message (e.g., text, image, etc.)
     created_at: v.string(), // Message timestamp

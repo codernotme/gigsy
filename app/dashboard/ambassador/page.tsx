@@ -1,22 +1,30 @@
 "use client"
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useMinecraftToast } from "@/hooks/use-minecraft-toast"
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Award, Star, Flag } from "lucide-react"
-import { useAuthStore } from "@/lib/store/auth-store"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 
 export default function AmbassadorDashboard() {
-  const { user } = useAuthStore()
+  const user = useQuery(api.users.get)
   const router = useRouter()
+  const toast = useMinecraftToast()
 
   useEffect(() => {
-    if (!user || user.role !== 'ambassador') {
-      router.push('/auth')
+    if (!user || user.role !== "ambassador") {
+      toast.error({
+        title: "Unauthorized Access",
+        description: "You don't have permission to access the Ambassador dashboard."
+      })
+      router.push('/dashboard')
+      return
     }
-  }, [user, router])
+  }, [user, router, toast])
 
-  if (!user || user.role !== 'ambassador') return null
+  if (!user || user.role !== "ambassador") return null
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -67,8 +75,6 @@ export default function AmbassadorDashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Add more ambassador features here */}
     </div>
   )
 }

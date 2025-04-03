@@ -1,5 +1,10 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { useMinecraftToast } from "@/hooks/use-minecraft-toast"
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
@@ -10,9 +15,6 @@ import {
   Trophy, Coins, MessageSquare, Calendar, ArrowUp, 
   ArrowDown, CheckCircle, Star, BookOpen
 } from "lucide-react"
-import { useAuthStore } from "@/lib/store/auth-store"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 
 interface Project {
   id: string | number;
@@ -23,33 +25,43 @@ interface Project {
 }
 
 export default function IndividualDashboard() {
-  const { user } = useAuthStore()
-  const router = useRouter()
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
+  const user = useQuery(api.users.get)
+  const router = useRouter()
+  const toast = useMinecraftToast()
 
   useEffect(() => {
-    if (!user || user.accountType !== 'individual') {
-      router.push('/dashboard')
-    } else {
-      setLoading(true)
-      fetch('/api/projects', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'application/json',
-        },
+    if (!user || user.role !== "individual") {
+      toast.error({
+        title: "Unauthorized Access",
+        description: "You don't have permission to access the Individual dashboard."
       })
-        .then((res) => {
-          if (!res.ok) throw new Error('Failed to fetch projects')
-          return res.json()
-        })
-        .then((data) => setProjects(data))
-        .catch((err) => alert(err.message))
-        .finally(() => setLoading(false))
+      router.push('/dashboard')
+      return
     }
-  }, [user, router])
 
-  if (!user || user.accountType !== 'individual') return null
+    // Fetch projects only if authorized
+    setLoading(true)
+    fetch('/api/projects', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch projects')
+        return res.json()
+      })
+      .then((data) => setProjects(data))
+      .catch((err) => {
+        toast.error({
+          title: "Failed to Load Projects",
+          description: err.message
+        })
+      })
+      .finally(() => setLoading(false))
+  }, [user, router, toast])
 
   if (loading) {
     return <div className="text-center py-8">Loading...</div>

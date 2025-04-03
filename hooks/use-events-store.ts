@@ -21,6 +21,7 @@ export const useEventsStore = create<EventsState>((set) => ({
       const events = await getEvents();
       set({ events, error: null });
     } catch (error) {
+      console.error('Error fetching events:', error);
       set({ error: 'Failed to fetch events' });
     } finally {
       set({ loading: false });
@@ -35,6 +36,7 @@ export const useEventsStore = create<EventsState>((set) => ({
         error: null,
       }));
     } catch (error) {
+      console.error('Error creating event:', error);
       set({ error: 'Failed to create event' });
     } finally {
       set({ loading: false });
@@ -46,6 +48,7 @@ export const useEventsStore = create<EventsState>((set) => ({
       await registerForEvent(eventId, userId);
       set({ error: null });
     } catch (error) {
+      console.error('Error registering for event:', error);
       set({ error: 'Failed to register for event' });
     } finally {
       set({ loading: false });

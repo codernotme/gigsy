@@ -1,22 +1,30 @@
 "use client"
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useMinecraftToast } from "@/hooks/use-minecraft-toast"
+import { api } from "@/convex/_generated/api"
+import { useQuery } from "convex/react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertTriangle, CheckCircle, Clock, Settings } from "lucide-react"
-import { useAuthStore } from "@/lib/store/auth-store"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 
 export default function MaintainerDashboard() {
-  const { user } = useAuthStore()
+  const user = useQuery(api.users.get)
   const router = useRouter()
+  const toast = useMinecraftToast()
 
   useEffect(() => {
-    if (!user || user.role !== 'maintainer') {
-      router.push('/auth')
+    if (!user || user.role !== "maintainer") {
+      toast.error({
+        title: "Unauthorized Access",
+        description: "You don't have permission to access the System Maintenance dashboard."
+      })
+      router.push('/dashboard')
+      return
     }
-  }, [user, router])
+  }, [user, router, toast])
 
-  if (!user || user.role !== 'maintainer') return null
+  if (!user || user.role !== "maintainer") return null
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -67,8 +75,6 @@ export default function MaintainerDashboard() {
           </CardContent>
         </Card>
       </div>
-
-      {/* Add more maintainer features here */}
     </div>
   )
 }

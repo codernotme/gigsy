@@ -38,7 +38,7 @@ export function useWallet() {
       setError(null);
     } catch (err) {
       setError('Failed to fetch wallet');
-      console.error(err);
+      console.error('Error fetching wallet:', err);
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export function useWallet() {
       setError(null);
     } catch (err) {
       setError('Failed to fetch transactions');
-      console.error(err);
+      console.error('Error fetching transactions:', err);
     } finally {
       setLoading(false);
     }

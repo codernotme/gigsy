@@ -1,56 +1,39 @@
 import { v } from "convex/values";
 import { internalQuery, internalMutation } from "./_generated/server";
 
+
 // Mutation to create a new user in the database
 export const create = internalMutation({
   args: {
+    clerkId: v.string(), // Unique identifier from Clerk
+    username: v.string(), // Unique username for the user
     email: v.string(),
-    name: v.optional(v.string()),
-    image: v.optional(v.string()),
+    name: v.string(),
     phone: v.optional(v.string()),
-    isAnonymous: v.optional(v.boolean()),
-    display_name: v.optional(v.string()),
-    avatar_url: v.optional(v.string()),
-    bio: v.optional(v.string()),
+    role: v.optional(v.string()), // User role, default is "individual"
+    account_type: v.optional(v.string()), // Account type: "individual" or "group"
+    avatar_url: v.optional(v.string()), // URL to user's avatar/profile picture
+    bio: v.optional(v.string()), // User biography or description
     skills: v.optional(v.array(v.string())),
-    created_at: v.optional(v.string()),
   },
-  handler: async (
-    { db },
-    { email, name, image, phone, isAnonymous, display_name, avatar_url, bio, skills, created_at }
-  ) => {
-    const now = new Date().toISOString();
-    await db.insert("users", {
-      email,
-      name: name ?? "",
-      image: image ?? "",
-      phone: phone ?? "",
-      isAnonymous: isAnonymous ?? false,
-      role: "individual", // Default role
-      account_type: "individual", // Default account type
-      display_name: display_name ?? "",
-      avatar_url: avatar_url ?? "",
-      bio: bio ?? "",
-      skills: skills ?? [],
-      created_at: created_at ?? now,
-      updated_at: now, // Ensure updated_at is always set
-    });
+  handler: async (ctx, args) => {
+    const user = {
+      ...args,
+    };
+    // Insert the new user record into the "users" table
+    await ctx.db.insert("users", user);
   },
 });
 
-// Query to retrieve a user by their _id or email
+// Query to retrieve a user by their Clerk ID
 export const get = internalQuery({
   args: {
-    _id: v.optional(v.id("users")),
-    email: v.optional(v.string()),
+    clerkId: v.string() // The Clerk ID of the user to be retrieved
   },
-  handler: async ({ db }, { _id, email }) => {
-    if (_id) {
-      return await db.get(_id);
-    }
-    if (email) {
-      return await db.query("users").filter(q => q.eq(q.field("email"), email)).first();
-    }
-    return null;
+  handler: async (ctx, args) => {
+    // Query the "users" table using the "by_clerkId" index to find the user with the specified Clerk ID
+    return ctx.db.query("users")
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", args.clerkId))
+      .unique(); // Expect a unique result since Clerk IDs are unique
   },
 });

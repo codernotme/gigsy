@@ -14,22 +14,19 @@ export default defineSchema({
    * Users table containing authentication and account details
    */
   users: defineTable({
-    name: v.optional(v.string()),
-    image: v.optional(v.string()),
-    email: v.optional(v.string()),
-    emailVerificationTime: v.optional(v.number()),
+    clerkId: v.string(), // Unique identifier from Clerk
+    username: v.string(), // Unique username for the user
+    email: v.string(),
+    name: v.string(),
     phone: v.optional(v.string()),
-    phoneVerificationTime: v.optional(v.number()),
-    isAnonymous: v.optional(v.boolean()),
     role: v.optional(v.string()), // User role, default is "individual"
     account_type: v.optional(v.string()), // Account type: "individual" or "group"
-    display_name: v.optional(v.string()), // User's display name
     avatar_url: v.optional(v.string()), // URL to user's avatar/profile picture
     bio: v.optional(v.string()), // User biography or description
     skills: v.optional(v.array(v.string())), // List of user skills
-    created_at: v.optional(v.string()), // Account creation timestamp
-    updated_at: v.optional(v.string()), // Last update timestamp
-  }).index("email", ["email"]),
+  }).index("by_username", ["username"])
+  .index("by_clerkId", ["clerkId"])
+  .index("by_email", ["email"]),
 
   /**
    * User wallets for managing platform currency and transactions

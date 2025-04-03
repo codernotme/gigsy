@@ -35,33 +35,38 @@ export default function IndividualDashboard() {
     if (!user || user.role !== "individual") {
       toast.error({
         title: "Unauthorized Access",
-        description: "You don't have permission to access the Individual dashboard."
-      })
-      router.push('/dashboard')
-      return
+        description: "You don't have permission to access the Individual dashboard.",
+      });
+      router.push("/dashboard");
+      return;
     }
 
     // Fetch projects only if authorized
-    setLoading(true)
-    fetch('/api/projects', {
+    setLoading(true);
+    fetch("/api/projects", {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to fetch projects')
-        return res.json()
+        if (res.status === 404) {
+          throw new Error("Projects API endpoint not found.");
+        }
+        if (!res.ok) {
+          throw new Error("Failed to fetch projects.");
+        }
+        return res.json();
       })
       .then((data) => setProjects(data))
       .catch((err) => {
         toast.error({
           title: "Failed to Load Projects",
-          description: err.message
-        })
+          description: err.message,
+        });
       })
-      .finally(() => setLoading(false))
-  }, [user, router, toast])
+      .finally(() => setLoading(false));
+  }, [user, router, toast]);
 
   if (loading) {
     return <div className="text-center py-8">Loading...</div>

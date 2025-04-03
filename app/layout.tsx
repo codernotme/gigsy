@@ -6,8 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Navbar } from "@/components/navbar";
 import { MinecraftToaster } from '@/components/minecraft-toaster';
-import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
-import { Provider } from '@/components/Provider';
+import Provider from '@/components/Provider';
 
 
 export const metadata: Metadata = {
@@ -22,26 +21,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ConvexAuthNextjsServerProvider>
-      <Provider>
-    <html lang="en" suppressHydrationWarning>
-      <body className="minecraft-style">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <Navbar />
-          <main className="pt-16">
-            {children}
-          </main>
-          <Toaster />
-          <MinecraftToaster />
-        </ThemeProvider>
-      </body>
-    </html>
+    <Provider>
+      <html lang="en" suppressHydrationWarning>
+        <body className="minecraft-style">
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            <main className="flex flex-col text-foreground pt-16 ">
+              {children}
+            </main>
+            <Toaster />
+            <MinecraftToaster />
+          </ThemeProvider>
+        </body>
+      </html>
     </Provider>
-    </ConvexAuthNextjsServerProvider>
   );
 }

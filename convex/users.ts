@@ -1,20 +1,21 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getUserByClerkId } from "./_utils";
+import { v4 as uuidv4 } from "uuid";
 
 // Mutation to update user data by Clerk ID
 export const update = mutation({
   args: v.object({
     clerkId: v.string(), // Unique identifier from Clerk
-    username: v.string(), // Unique username for the user
-    email: v.string(),
-    name: v.string(),
+    username: v.optional(v.string()), // Unique username for the user
+    email: v.optional(v.string()), // Make email optional
+    name: v.optional(v.string()), // Make name optional
     phone: v.optional(v.string()),
     role: v.optional(v.string()), // User role, default is "individual"
     account_type: v.optional(v.string()), // Account type: "individual" or "group"
     avatar_url: v.optional(v.string()), // URL to user's avatar/profile picture
     bio: v.optional(v.string()), // User biography or description
-    skills: v.optional(v.array(v.string())),
+    skills: v.optional(v.array(v.string())), // List of user skills
   }),
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -25,10 +26,11 @@ export const update = mutation({
 
     const user = await ctx.db
       .query("users")
-      .withIndex("by_clerkId", (q) => q.eq("clerkId", args.clerkId))
+      .withIndex("by_clerkId", (q) => q.eq("clerkId", String(args.clerkId))) // Ensure clerkId is treated as a string
       .unique();
 
     if (!user) {
+      console.error(`User not found in the database for clerkId: ${args.clerkId}`);
       throw new ConvexError("User not found in the database");
     }
 
@@ -39,6 +41,34 @@ export const update = mutation({
     await ctx.db.patch(user._id, updatedFields);
 
     return { ...user, ...updatedFields };
+  },
+});
+
+// Mutation to handle image URL storage
+export const uploadImage = mutation({
+  args: v.object({
+    imageUrl: v.string(), // The URL of the uploaded image
+  }),
+  handler: async (ctx, { imageUrl }) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new ConvexError("Unauthorized");
+    }
+
+    const user = await getUserByClerkId({
+      ctx,
+      clerkId: identity.subject,
+    });
+
+    if (!user) {
+      throw new ConvexError("User not found");
+    }
+
+    // Update the user's avatar URL in the database
+    await ctx.db.patch(user._id, { avatar_url: imageUrl });
+
+    return { avatar_url: imageUrl };
   },
 });
 

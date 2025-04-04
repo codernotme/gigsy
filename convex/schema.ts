@@ -1,4 +1,3 @@
-import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
@@ -8,8 +7,6 @@ import { v } from "convex/values";
  * projects, transactions, events, and messaging functionality.
  */
 export default defineSchema({
-    ...authTables, // Authentication tables from Convex
-
   /**
    * Users table containing authentication and account details
    */

@@ -102,12 +102,6 @@ Thanks to these amazing contributors:
 [![Contributors](https://contrib.rocks/image?repo=codernotme/gigsy)](https://github.com/codernotme/gigsy/graphs/contributors)
 
 Want to contribute? Open an issue or submit a pull request!
-
----
-
-## 📬 Contact
-For queries or collaborations, reach out at **[contact@tacklestudioz.com](mailto:contact@tacklestudioz.com)**.
-
 ---
 
 **🌟 Star this repo if you like it! Let's build something great together.** 🚀

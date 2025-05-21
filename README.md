@@ -75,18 +75,9 @@ Gigsy is an innovative platform developed to revolutionize freelancing within co
    npm install
    ```
 
-3. Set up Supabase:
-   - Create a Supabase project at [supabase.com](https://supabase.com).
-   - Copy your Supabase URL and Anon Key into `.env.local`.
-
-4. Start the development server:
+3. Start the development server:
    ```bash
    npm run dev
-   ```
-
-5. Seed the database:
-   ```bash
-   npx supabase db reset
    ```
 
 ---
